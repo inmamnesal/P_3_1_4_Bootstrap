@@ -30,18 +30,19 @@ public class UserDaoImpl implements UserDao{
     }
 
     @Override
-    public User getUserByUsername(String username) {
-        Query query = entityManager.createQuery("SELECT u FROM User u where u.username =:username", User.class);
-        query.setParameter("username", username);
-        Optional<User> user = Optional.ofNullable((User)query.getResultList().get(0));
+    public User getUserByUsername(String email) {
+        Query query = entityManager.createQuery("SELECT u FROM User u where u.email =:email", User.class);
+        query.setParameter("email", email);
+        Optional <List<User>> userList = Optional.ofNullable(query.getResultList());
 
 //        Optional<User> user = Optional.ofNullable(entityManager.createQuery("SELECT u FROM User u where u.username =:username", User.class).getResultList().get(0));
 
-        if (user.isEmpty()) {
-            throw new UsernameNotFoundException("User not found!");
+
+        if (userList.get().isEmpty()) {
+            throw new UsernameNotFoundException("email not found!");
         }
 
-        return user.get();
+        return userList.get().get(0);
     }
 
     @Override
